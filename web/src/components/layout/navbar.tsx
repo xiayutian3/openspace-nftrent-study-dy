@@ -61,9 +61,9 @@ export default function Navbar() {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <Link href="/mkt">
+              <a>
                 <BuildingStorefrontIcon className="h-6 w-6" /> Market
-              </Link>
+              </a>
             </li>
             {isConnected && (
               <li>

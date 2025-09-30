@@ -1,30 +1,19 @@
 export interface NFTInfo {
   id: string;
+  address: string;
+  isSemiFungible: boolean;
   tokenId: string;
-  ca: string;
-  tokenURL: string;
-  blockTimestamp: string;
+  tokenBalance: string;
+  tokenURI: string;
   name: string;
-  owner: string;
-}
-
-/*
- * @description: NFT出租信息
- */
-export interface RentoutOrderMsg {
-  maker: string; // 租户地址
-  nft_ca: string; // NFT合约地址
-  token_id: bigint; // NFT tokenId
-  daily_rent: bigint; // 每日租金
-  max_rental_duration: bigint; // 最大租赁时长
-  min_collateral: bigint; // 最小抵押
-  list_endtime: bigint; // 挂单结束时间
-}
-
-export interface RentoutOrderEntry extends RentoutOrderMsg {
-  id: number;
-  token_url: string;
-  token_name: string;
-  signature: string;
-  created_at: string;
+  symbol: string;
+  image: string;
+  data: {
+    name: string;
+    image: string;
+    description: string;
+    animation_url: string;
+  };
+  isScam: boolean;
+  animationUrl: string;
 }

@@ -25,7 +25,7 @@ db.serialize(() => {
     `CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY,
             chainId INTEGER NOT NULL,
-            maker TEXT,
+            taker TEXT,
             nftCA TEXT,
             tokenId INTEGER,
             nftName TEXT,

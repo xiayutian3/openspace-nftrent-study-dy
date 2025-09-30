@@ -1,70 +1,48 @@
-import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+// 第一种钱包的连接方式
+// import { createConfig, http } from 'wagmi'
+// import { mainnet, sepolia } from 'wagmi/chains'
+// import { injected, metaMask, safe, walletConnect } from 'wagmi/connectors'
 
-import { cookieStorage, createStorage } from "wagmi";
-import { localhost, mainnet, sepolia } from "wagmi/chains";
+// const projectId = 'e36d438d742f34cfd7dce241fac09d09'
 
-(BigInt.prototype as any).toJSON = function () {
-  return this.toString();
-};
+// export const config = createConfig({
+//   chains: [mainnet, sepolia],
+//   connectors: [
+//     injected(),
+//     walletConnect({ projectId }),
+//     metaMask(),
+//     safe(),
+//   ],
+//   transports: {
+//     [mainnet.id]: http('https://rpc.payload.de'),
+//     [sepolia.id]: http('https://ethereum-sepolia-rpc.publicnode.com'),
+//   },
+// })
 
-// Get projectId at https://cloud.walletconnect.com
-export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
-if (!projectId) throw new Error("Project ID is not defined");
 
-// 来自于已经部署的 thegraph：
-export const RENFT_GRAPHQL_URL = process.env.NEXT_PUBLIC_RENFT_GRAPHQL_URL;
+//第二种 钱包集成sdk
+import { cookieStorage, createStorage, http } from '@wagmi/core'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
+import { mainnet, arbitrum ,sepolia} from '@reown/appkit/networks'
 
-if (!RENFT_GRAPHQL_URL) throw new Error("RENFT_GRAPHQL_URL is not defined");
+// Get projectId from https://dashboard.reown.com
+export const projectId = 'e36d438d742f34cfd7dce241fac09d09'
 
-export const LOADIG_IMG_URL = "/images/loading.svg";
-export const DEFAULT_NFT_IMG_URL = "/images/empty_nft.png";
+if (!projectId) {
+  throw new Error('Project ID is not defined')
+}
 
-const metadata = {
-  name: "Web3Modal",
-  description: "Web3Modal Example",
-  url: "https://web3modal.com", // origin must match your domain & subdomain
-  icons: ["https://avatars.githubusercontent.com/u/37784886"],
-};
+export const networks = [mainnet, arbitrum,sepolia]
 
-// Create wagmiConfig
-const chains = [mainnet, sepolia] as const;
-export const config = defaultWagmiConfig({
-  chains,
-  projectId,
-  metadata,
-  ssr: true,
+//Set up the Wagmi Adapter (Config)
+export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({
-    storage: cookieStorage,
+    storage: cookieStorage
   }),
-  // ...wagmiOptions, // Optional - Override createConfig parameters
-});
+  ssr: true,
+  projectId,
+  networks
+})
 
-import { http, createConfig } from "@wagmi/core";
-export const wagmiConfig = createConfig({
-  chains: [mainnet, sepolia],
-  transports: {
-    [mainnet.id]: http("https://ethereum-rpc.publicnode.com"),
-    [sepolia.id]: http("https://ethereum-sepolia-rpc.publicnode.com"),
-  },
-});
-
-import { type TypedData } from "viem";
-
-// 协议配置
-export const PROTOCOL_CONFIG = {
-  [Number(sepolia.id)]: {
-    domain: {
-      // TODO: 配置EIP-712签名域名信息
-    },
-    rentoutMarket: "0x000...000", // TODO: 配置出租市场合约地址
-  },
-} as const;
-
-// EIP-721 签名类型
-export const eip721Types = {
-  // 出租NFT的挂单信息结构
-  RentoutOrder: [
-    // TODO: 定义出租订单结构数据
-  ],
-} as const as TypedData;
+export const config = wagmiAdapter.wagmiConfig
