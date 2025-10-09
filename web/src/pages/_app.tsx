@@ -39,16 +39,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { wagmiAdapter, projectId } from '@/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createAppKit } from '@reown/appkit/react'
-import { mainnet, arbitrum } from '@reown/appkit/networks'
+import { mainnet, arbitrum,sepolia } from '@reown/appkit/networks'
 import React, { type ReactNode } from 'react'
 import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi'
 
-import { headers } from 'next/headers' // 
 
 
   let cookiesobj:any
-// Pages Router 方式
- async function getServerSideProps(context: { req: { headers: { [x: string]: any; }; }; }) {
+// Pages Router 方式 (在 Next.js 的 Pages Router 中，getServerSideProps 是一个特殊的函数，不需要手动调用，它会在每次页面请求时由 Next.js 自动执行)
+export const getServerSideProps = async (context: { req: { headers: { [x: string]: any; }; }; }) => {
     // 获取所有 cookie 字符串
   const cookieHeader = context.req.headers.cookie || ''
 
@@ -95,7 +94,7 @@ const metadata = {
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: [mainnet, arbitrum],
+  networks: [mainnet, arbitrum,sepolia],
   defaultNetwork: mainnet,
   metadata: metadata,
   features: {
